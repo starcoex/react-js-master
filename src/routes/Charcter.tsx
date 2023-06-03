@@ -3,6 +3,7 @@ import { Img } from "react-image";
 import { Link } from "react-router-dom";
 import { useLocation, useParams } from "react-router-dom";
 import styled from "styled-components";
+import { fetchCharacters } from "../components/api";
 const Container = styled.div``;
 const Header = styled.header``;
 const Loader = styled.span``;
@@ -19,7 +20,7 @@ interface RouteState {
 }
 interface ICharacter {
   films: string[];
-  id: number;
+  id: string;
   imageUrl: string;
   name: string;
   sourceUrl: string;
@@ -31,12 +32,13 @@ export default function Charcter() {
   const [character, setCharacter] = useState<ICharacter>();
   const { state }: RouteState = useLocation();
   useEffect(() => {
-    fetch(`https://disney_api.nomadcoders.workers.dev/characters/${id}`)
-      .then((response) => response.json())
-      .then((json) => setCharacter(json));
+    // fetch(`https://disney_api.nomadcoders.workers.dev/characters/${id}`)
+    //   .then((response) => response.json())
+    //   .then((json) => setCharacter(json));
+    fetchCharacters(id!).then((data) => setCharacter(data));
     setLoading(false);
   }, []);
-  console.log(character);
+
   return (
     <Container>
       <Header>

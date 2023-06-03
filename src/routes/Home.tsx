@@ -3,6 +3,8 @@ import styled from "styled-components";
 
 import { Img } from "react-image";
 import { Link } from "react-router-dom";
+import { fetchCharactersList } from "../components/api";
+import Charcter from "./Charcter";
 
 interface ICharctersList {
   id: number;
@@ -22,13 +24,15 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     let ignore = false;
-    const results = [];
-    fetch("https://disney_api.nomadcoders.workers.dev/characters")
-      .then((response) => response.json())
-      .then((json) => setCharacter(json.slice(0, 100)));
+    let results = [];
+    fetchCharactersList().then((data) => setCharacter(data));
+    // fetch("https://disney_api.nomadcoders.workers.dev/characters")
+    //   .then((response) => response.json())
+    //   .then((json) => setCharacter(json.slice(0, 100)));
+
     setLoading(false);
   }, []);
-  console.log(character);
+
   return (
     <Container>
       <Header>
