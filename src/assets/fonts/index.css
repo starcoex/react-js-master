@@ -1,0 +1,6 @@
+@font-face {
+  font-family: "ISOCTEUR V1";
+  src: url("./ISOCTEUR V1.woff") format("woff"),
+    url("./ISOCTEUR V1.woff2") format("woff2"),
+    url("./ISOCTEUR V1.ttf") format("truetype");
+}

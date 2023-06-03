@@ -1,7 +1,8 @@
 import React from "react";
-import Home from "../screens/Home";
+import Home from "../routes/Home";
 import About from "../screens/About";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import styled from "styled-components";
 
 export default function Header() {
   const param = useParams();
