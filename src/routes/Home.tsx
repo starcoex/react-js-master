@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
-
 import { Img } from "react-image";
 import { Link } from "react-router-dom";
 import { fetchCharactersList } from "../components/api";
-import Charcter from "./Charcter";
+import { useQuery } from "@tanstack/react-query";
 
 interface ICharctersList {
   id: number;
@@ -12,43 +11,76 @@ interface ICharctersList {
   name: string;
 }
 
-const Container = styled.div``;
-const Header = styled.header``;
+const Container = styled.div`
+  width: 100%;
+  height: 100vh;
+`;
+const Header = styled.header`
+  display: flex;
+  justify-content: center;
+  margin: 50px 0 20px 0;
+`;
 const Loader = styled.span``;
 const Title = styled.h1``;
-const CharactersList = styled.ul``;
-const Charater = styled.li``;
+const CharactersList = styled.ul`
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  place-items: center;
+`;
+const Charater = styled.li`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 250px;
+  height: 170px;
+  /* border: 1px solid white; */
+
+  :hover {
+    background-color: red;
+  }
+  border-radius: 15px;
+  .disnes_img {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+  }
+  span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 5px;
+    color: white;
+    font-weight: 500;
+    font-size: 14px;
+  }
+`;
 
 export default function Home() {
-  const [character, setCharacter] = useState<ICharctersList[]>();
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    let ignore = false;
-    let results = [];
-    fetchCharactersList().then((data) => setCharacter(data));
-    // fetch("https://disney_api.nomadcoders.workers.dev/characters")
-    //   .then((response) => response.json())
-    //   .then((json) => setCharacter(json.slice(0, 100)));
-
-    setLoading(false);
-  }, []);
-
+  const { isLoading, data, isFetching } = useQuery<ICharctersList[]>(
+    ["characterList"],
+    fetchCharactersList,
+    {
+      select(data) {
+        return data.slice(0, 500);
+      },
+    }
+  );
   return (
     <Container>
       <Header>
-        <Title></Title>
+        <Title>Disney Charaters</Title>
       </Header>
-      {loading ? (
+      {isLoading ? (
         <Loader>Loader...</Loader>
       ) : (
         <CharactersList>
-          {character?.map((char) => (
-            <Link to={`character/${char.id}`} state={{ name: char.name }}>
-              <Charater key={char.id}>
-                <Img src={char.imageUrl} />
-                {char.name}
-              </Charater>
-            </Link>
+          {data?.map((char) => (
+            <Charater key={char.id}>
+              <Link to={`character/${char.id}`} state={{ name: char.name }}>
+                <Img src={char.imageUrl} className="disnes_img" />
+                <span> {char.name.slice(0, 15)}</span>
+              </Link>
+            </Charater>
           ))}
         </CharactersList>
       )}

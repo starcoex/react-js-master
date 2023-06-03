@@ -1,20 +1,52 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Img } from "react-image";
 import { Link } from "react-router-dom";
 import { useLocation, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { fetchCharacters } from "../components/api";
-const Container = styled.div``;
-const Header = styled.header``;
-const Loader = styled.span``;
-const Title = styled.h1``;
-const BackBtn = styled.span``;
-const CharactersList = styled.ul``;
-const Charater = styled.li``;
+import { useQuery } from "@tanstack/react-query";
 
-interface RouteParams {
-  id: string;
-}
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  .char_img {
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+  }
+`;
+const Header = styled.header`
+  margin: 100px 0 10px 0;
+`;
+const Loader = styled.span``;
+const Title = styled.h1`
+  font-size: 20px;
+  margin: 10px 0 10px 0;
+`;
+const BackBtn = styled.span`
+  color: white;
+`;
+const CharactersList = styled.ul`
+  width: 320px;
+  /* height: 100vh; */
+  display: flex;
+  /* flex-direction: column; */
+  flex-wrap: wrap;
+  justify-content: center;
+`;
+const Charater = styled.li`
+  background-color: red;
+  /* :hover {
+    background-color: red;
+  } */
+  border: 1px solid white;
+  padding: 8px;
+  border-radius: 8px;
+  margin: 5px;
+`;
+
 interface RouteState {
   state: { name: string };
 }
@@ -26,40 +58,36 @@ interface ICharacter {
   sourceUrl: string;
 }
 export default function Charcter() {
-  const [info, setInfo] = useState({});
   const { id } = useParams();
-  const [loading, setLoading] = useState(true);
-  const [character, setCharacter] = useState<ICharacter>();
   const { state }: RouteState = useLocation();
-  useEffect(() => {
-    // fetch(`https://disney_api.nomadcoders.workers.dev/characters/${id}`)
-    //   .then((response) => response.json())
-    //   .then((json) => setCharacter(json));
-    fetchCharacters(id!).then((data) => setCharacter(data));
-    setLoading(false);
-  }, []);
+
+  const { isLoading, data } = useQuery<ICharacter>(["character"], () =>
+    fetchCharacters(id!)
+  );
 
   return (
     <Container>
       <Header>
-        <Title>{state?.name || "Loading..."} </Title>
+        <Link to="/">
+          <BackBtn>⬅️</BackBtn>
+        </Link>
+        {/* <Title>{state?.name || "Loading..."} </Title> */}
       </Header>
-      <Link to="/">
-        <BackBtn>🔙⬅️</BackBtn>
-      </Link>
 
-      {loading ? (
+      {isLoading ? (
         <Loader>
           Loader...<span></span>
         </Loader>
       ) : (
         <Container>
-          {/* <Img src="https://static.wikia.nocookie.net/disney/images/8/8f/Achilles_HOND.jpg" /> */}
-          <Img src={character?.imageUrl ? character.imageUrl : "undefined"} />"
-          {/* <img src={character?.imageUrl} /> */}
+          <Img
+            src={data?.imageUrl ? data.imageUrl : "undefined"}
+            className="char_img"
+          />
+          <Title>{data?.films[0].replace(/\(/g, "")}</Title>
           <CharactersList>
-            {character?.films.map((f) => (
-              <Charater key={character.id}>{f}</Charater>
+            {data?.films.map((f) => (
+              <Charater key={data.id}>{f}</Charater>
             ))}
           </CharactersList>
         </Container>
