@@ -16,6 +16,7 @@ const Container = styled.div`
     height: 250px;
     border-radius: 50%;
   }
+  background-color: ${(props) => props.theme.bgColor};
 `;
 const Header = styled.header`
   margin: 100px 0 10px 0;

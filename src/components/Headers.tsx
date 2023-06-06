@@ -8,6 +8,8 @@ import {
   useParams,
 } from "react-router-dom";
 import styled from "styled-components";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { isDarkState } from "../screens/atoms/atoms";
 
 interface IToggleDark {
   toggleDark: () => void;
@@ -15,18 +17,8 @@ interface IToggleDark {
 }
 
 export default function Headers() {
-  const { toggleDark, isDark } = useOutletContext<IToggleDark>();
-  console.log(toggleDark, isDark);
+  const [isDark, setIsDark] = useRecoilState(isDarkState);
 
-  const param = useParams();
-  console.log("header param", param);
-  //   const navigate = useNavigate();
-  //   const onHomeClick = () => {
-  //     navigate("/");
-  //   };
-  //   const onAboutClick = () => {
-  //     navigate("/about");
-  //   };
   return (
     <header>
       <ul>
@@ -39,7 +31,9 @@ export default function Headers() {
           {/* <button onClick={onAboutClick}>About</button> */}
         </li>
       </ul>
-      <button onClick={toggleDark}>{isDark ? "DarkMode" : "LightMode"}</button>
+      <button onClick={() => setIsDark((prev) => !prev)}>
+        {isDark ? "DarkMode" : "LightMode"}
+      </button>
     </header>
   );
 }
