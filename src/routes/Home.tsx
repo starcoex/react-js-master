@@ -4,6 +4,7 @@ import { Img } from "react-image";
 import { Link } from "react-router-dom";
 import { fetchCharactersList } from "../components/api";
 import { useQuery } from "@tanstack/react-query";
+import Headers from "../components/Headers";
 
 interface ICharctersList {
   id: number;
@@ -14,6 +15,7 @@ interface ICharctersList {
 const Container = styled.div`
   width: 100%;
   height: 100vh;
+  background-color: ${(props) => props.theme.bgColor};
 `;
 const Header = styled.header`
   display: flex;
@@ -49,7 +51,7 @@ const Charater = styled.li`
     align-items: center;
     justify-content: center;
     padding-top: 5px;
-    color: white;
+    color: ${(props) => props.theme.textColr};
     font-weight: 500;
     font-size: 14px;
   }
@@ -67,6 +69,8 @@ export default function Home() {
   );
   return (
     <Container>
+      <Headers />
+
       <Header>
         <Title>Disney Charaters</Title>
       </Header>

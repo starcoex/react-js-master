@@ -1,10 +1,23 @@
 import React from "react";
 import Home from "../routes/Home";
 import About from "../screens/About";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import {
+  Link,
+  useNavigate,
+  useOutletContext,
+  useParams,
+} from "react-router-dom";
 import styled from "styled-components";
 
-export default function Header() {
+interface IToggleDark {
+  toggleDark: () => void;
+  isDark: boolean;
+}
+
+export default function Headers() {
+  const { toggleDark, isDark } = useOutletContext<IToggleDark>();
+  console.log(toggleDark, isDark);
+
   const param = useParams();
   console.log("header param", param);
   //   const navigate = useNavigate();
@@ -26,6 +39,7 @@ export default function Header() {
           {/* <button onClick={onAboutClick}>About</button> */}
         </li>
       </ul>
+      <button onClick={toggleDark}>{isDark ? "DarkMode" : "LightMode"}</button>
     </header>
   );
 }
