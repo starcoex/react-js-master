@@ -69,8 +69,6 @@ export default function Home() {
   );
   return (
     <Container>
-      <Headers />
-
       <Header>
         <Title>Disney Charaters</Title>
       </Header>

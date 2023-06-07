@@ -1,21 +1,12 @@
 import React, { useState } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { todoListState } from "../atoms";
+import { useForm } from "react-hook-form";
 
 export default function ToDoItemCreator() {
+  const { control, register, trigger, watch, getValues } = useForm();
   const [inputValue, setInputValue] = useState("");
-  const setTodoList = useSetRecoilState(todoListState);
-
-  interface ITodo {
-    id: number;
-    text: string;
-    isComplete: boolean;
-  }
-
-  let id = 0;
-  function getId() {
-    return id++;
-  }
+  const [todoList, setTodoList] = useRecoilState(todoListState);
 
   const onChange = (event: React.FormEvent<HTMLInputElement>) => {
     const {
@@ -24,20 +15,21 @@ export default function ToDoItemCreator() {
     setInputValue(value);
   };
   const addItem = () => {
-    // setTodoList((oldTodoList) => [
-    //   ...oldTodoList,
-    //   {
-    //     id: getId(),
-    //     text: inputValue,
-    //     isComplete: false,
-    //   },
-    // ]);
+    setTodoList((oldTodoList) => [
+      ...oldTodoList,
+      {
+        id: getId(),
+        text: inputValue,
+        isComplete: false,
+      },
+    ]);
+    console.log(id);
     setInputValue("");
   };
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
   };
-
+  console.log(todoList);
   return (
     <form onSubmit={onSubmit}>
       <input
@@ -49,4 +41,8 @@ export default function ToDoItemCreator() {
       <button onClick={addItem}>Add</button>
     </form>
   );
+}
+let id = 0;
+function getId() {
+  return id++;
 }

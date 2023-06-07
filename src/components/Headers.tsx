@@ -16,14 +16,15 @@ interface IToggleDark {
   isDark: boolean;
 }
 
+const Header = styled.header``;
+
 export default function Headers() {
   const [isDark, setIsDark] = useRecoilState(isDarkState);
 
   return (
-    <header>
+    <Header>
       <ul>
         <li>
-          {/* <button onClick={onHomeClick}>Home</button> */}
           <Link to="/">Home</Link>
         </li>
         <li>
@@ -34,6 +35,6 @@ export default function Headers() {
       <button onClick={() => setIsDark((prev) => !prev)}>
         {isDark ? "DarkMode" : "LightMode"}
       </button>
-    </header>
+    </Header>
   );
 }
